@@ -92,6 +92,7 @@ class OLMoForCausalLM(PreTrainedModel):
             loss=loss,
             logits=logits,
             past_key_values=outputs.attn_key_values,
+            hidden_states=(outputs.last_hidden_state,),
         )
 
     def can_generate(self) -> bool:

@@ -927,6 +927,9 @@ class OlmoOutput(NamedTuple):
     Attention keys and values from each block.
     """
 
+    last_hidden_state: Optional[torch.FloatTensor]
+
+
 
 class OlmoGenerateOutput(NamedTuple):
     token_ids: torch.LongTensor
@@ -1304,7 +1307,8 @@ class Olmo(nn.Module):
         if self.config.scale_logits:
             logits.mul_(1 / math.sqrt(self.config.d_model))
 
-        return OlmoOutput(logits=logits, attn_key_values=attn_key_values)  # type: ignore[arg-type]
+        return OlmoOutput(logits=logits, attn_key_values=attn_key_values, last_hidden_state=x)
+                            # type: ignore[arg-type]
 
     def get_fsdp_wrap_policy(self, wrap_strategy: Optional[FSDPWrapStrategy] = None):
         if wrap_strategy is None:
